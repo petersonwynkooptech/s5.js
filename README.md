@@ -1,24 +1,73 @@
-# S5 JavaScript ORM
+# s5.js
 
-A Rails ActiveRecord-like JavaScript ORM for the s5 API.
+A JavaScript ORM for the s5 API - the on-demand storage platform.
+
+## About s5
+
+s5 is an on-demand storage platform that provides a simple, RESTful API for storing and retrieving JSON documents. This library provides a Rails ActiveRecord-like interface for interacting with s5 collections, making it easy to work with your data in a familiar way.
+
+## Features
+
+- 🚀 **Rails ActiveRecord-like API** - Familiar methods like `find()`, `where()`, `create()`, `save()`
+- 📊 **Powerful Query DSL** - Support for complex queries with operators like `eq`, `gt`, `in`, `exists`
+- 🔍 **JSON Filtering** - Filter documents using JSON-based criteria
+- 📄 **Document Management** - Create, read, update, delete operations with full CRUD support
+- ⏰ **TTL Support** - Set time-to-live for documents
+- 🔄 **Real-time Updates** - Reload documents from the server
+- 🎯 **TypeScript Ready** - Full TypeScript support (coming soon)
 
 ## Installation
 
 ```bash
-npm install
+npm install s5.js
 ```
+
+## Quick Start
+
+```javascript
+import S5 from 's5.js';
+
+// Initialize the client
+const s5 = new S5({
+  apiKey: 'ak_your_prefix_your_secret'
+});
+
+// Get a collection
+const User = s5.collection('users');
+
+// Create a new user
+const user = await User.create({
+  name: 'John Doe',
+  email: 'john@example.com',
+  status: 'active'
+});
+
+// Find users
+const activeUsers = await User.where({
+  q: ['eq(data.status,"active")']
+});
+
+console.log(activeUsers.documents);
+```
+
+## Getting Started with s5
+
+Before using this library, you'll need:
+
+1. **An s5 account** - Sign up at [s5.host](https://s5.host)
+2. **An API key** - Generate one in your s5 dashboard
+3. **A collection** - Create collections to organize your data
 
 ## Usage
 
 ### Basic Setup
 
 ```javascript
-import S5 from './index.js';
+import S5 from 's5.js';
 
 const s5 = new S5({
-  baseURL: 'http://localhost:3000/api/v1',
-  apiKey: 'ak_your_prefix_your_secret',
-  collection: 'users' // default collection
+  baseURL: 'https://s5.host/api/v1',
+  apiKey: 'ak_your_prefix_your_secret'
 });
 
 // Get a collection (like a Rails model)
@@ -213,3 +262,17 @@ await User.where({
   limit: 50
 });
 ```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Links
+
+- **GitHub**: [https://github.com/petersonwynkooptech/s5.js](https://github.com/petersonwynkooptech/s5.js)
+- **npm**: [https://www.npmjs.com/package/s5.js](https://www.npmjs.com/package/s5.js)
+- **s5 Platform**: [https://s5.host](https://s5.host)
