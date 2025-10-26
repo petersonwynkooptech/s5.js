@@ -1,4 +1,4 @@
-# s5.js
+# s5-orm.js
 
 A JavaScript ORM for the s5 API - the on-demand storage platform.
 
