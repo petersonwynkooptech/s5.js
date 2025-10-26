@@ -93,7 +93,7 @@ export class Document {
         `/${client.collection}?${params}`
       );
 
-      const documents = response.data.data.data.map(
+      const documents = response.data.documents.map(
         (doc) => new Document(doc, client)
       );
 
@@ -101,8 +101,8 @@ export class Document {
       const result = { documents };
 
       // Add pagination metadata if available
-      if (response.data.data.pagination) {
-        result.pagination = response.data.data.pagination;
+      if (response.data.pagination) {
+        result.pagination = response.data.pagination;
       }
 
       return result;
@@ -123,7 +123,7 @@ export class Document {
 
     try {
       const response = await client.axios.get(`/${client.collection}/${id}`);
-      return new Document(response.data.data, client);
+      return new Document(response.data, client);
     } catch (error) {
       if (error.response?.status === 404) {
         return null;
@@ -174,7 +174,7 @@ export class Document {
         `/${client.collection}`,
         payload
       );
-      return new Document(response.data.data, client);
+      return new Document(response.data, client);
     } catch (error) {
       throw new Error(
         `Create failed: ${
