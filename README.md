@@ -106,6 +106,98 @@ const user = await User.find('user-123');
 const count = await User.count();
 ```
 
+### Pagination
+
+s5.js supports pagination with configurable page sizes. By default, the API returns 25 documents per page (maximum 100).
+
+```javascript
+// Basic pagination
+const result = await User.where({
+  limit: 10,  // 10 documents per page
+  page: 1     // First page
+});
+
+console.log(result.documents); // Array of documents
+console.log(result.pagination); // Pagination metadata
+```
+
+#### Pagination Response Structure
+
+```javascript
+{
+  documents: [
+    // Array of Document objects
+  ],
+  pagination: {
+    page: 1,        // Current page number
+    pages: 5,       // Total number of pages
+    count: 47,      // Total number of documents
+    limit: 10,      // Documents per page
+    from: 1,        // First document number on this page
+    to: 10          // Last document number on this page
+  }
+}
+```
+
+#### Pagination Examples
+
+```javascript
+// Get first page with 20 items
+const page1 = await User.where({
+  limit: 20,
+  page: 1
+});
+
+// Get second page
+const page2 = await User.where({
+  limit: 20,
+  page: 2
+});
+
+// Get last page (you can calculate this from pagination.pages)
+const lastPage = await User.where({
+  limit: 20,
+  page: page1.pagination.pages
+});
+
+// Pagination with filtering
+const activeUsers = await User.where({
+  q: ['eq(status,"active")'],
+  limit: 15,
+  page: 1
+});
+```
+
+#### Pagination Best Practices
+
+```javascript
+// Helper function to get all pages
+async function getAllPages(collection, options = {}) {
+  const allDocuments = [];
+  let page = 1;
+  let hasMore = true;
+
+  while (hasMore) {
+    const result = await collection.where({
+      ...options,
+      page,
+      limit: options.limit || 25
+    });
+
+    allDocuments.push(...result.documents);
+    hasMore = page < result.pagination.pages;
+    page++;
+  }
+
+  return allDocuments;
+}
+
+// Usage
+const allUsers = await getAllPages(User, {
+  q: ['eq(status,"active")']
+});
+```
+
 ### Creating Documents
 
 ```javascript
@@ -205,11 +297,18 @@ try {
 ### Document Class
 
 #### Static Methods (Class Methods)
-- `Document.where(options)` - Find documents
+- `Document.where(options)` - Find documents with pagination support
 - `Document.find(id)` - Find by ID
 - `Document.first(options)` - Find first document
 - `Document.count(options)` - Count documents
 - `Document.create(data, options)` - Create new document
+
+#### Query Options
+- `q` - Array of query DSL strings (e.g., `['eq(status,"active")']`)
+- `filter` - JSON filter object
+- `order` - Array of ordering strings (e.g., `['-updated_at']`)
+- `limit` - Number of documents per page (1-100, default: 25)
+- `page` - Page number (default: 1)
 
 #### Instance Methods
 - `document.save()` - Save (create or update)
