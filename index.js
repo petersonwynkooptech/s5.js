@@ -5,7 +5,7 @@ import axios from "axios";
  */
 export class S5Client {
   constructor(config = {}) {
-    this.baseURL = config.baseURL || "https://s5.host/api/v1";
+    this.baseURL = config.baseURL || "https://superstupidsimple.com/api/v1";
     this.apiKey = config.apiKey;
     this.collection = config.collection;
 

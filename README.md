@@ -8,13 +8,12 @@ s5 is an on-demand storage platform that provides a simple, RESTful API for stor
 
 ## Features
 
-- 🚀 **Rails ActiveRecord-like API** - Familiar methods like `find()`, `where()`, `create()`, `save()`
+- 🚀 **ActiveRecord-like API** - Familiar methods like `find()`, `where()`, `create()`, `save()`
 - 📊 **Powerful Query DSL** - Support for complex queries with operators like `eq`, `gt`, `in`, `exists`
 - 🔍 **JSON Filtering** - Filter documents using JSON-based criteria
 - 📄 **Document Management** - Create, read, update, delete operations with full CRUD support
 - ⏰ **TTL Support** - Set time-to-live for documents
 - 🔄 **Real-time Updates** - Reload documents from the server
-- 🎯 **TypeScript Ready** - Full TypeScript support (coming soon)
 
 ## Installation
 
@@ -44,7 +43,7 @@ const user = await User.create({
 
 // Find users
 const activeUsers = await User.where({
-  q: ['eq(data.status,"active")']
+  q: ['eq(status,"active")']
 });
 
 console.log(activeUsers.documents);
@@ -54,7 +53,7 @@ console.log(activeUsers.documents);
 
 Before using this library, you'll need:
 
-1. **An s5 account** - Sign up at [s5.host](https://s5.host)
+1. **An s5 account** - Sign up at [superstupidsimple.com](https://superstupidsimple.com)
 2. **An API key** - Generate one in your s5 dashboard
 3. **A collection** - Create collections to organize your data
 
@@ -66,7 +65,6 @@ Before using this library, you'll need:
 import S5 from 's5.js';
 
 const s5 = new S5({
-  baseURL: 'https://s5.host/api/v1',
   apiKey: 'ak_your_prefix_your_secret'
 });
 
@@ -82,14 +80,14 @@ const users = await User.where();
 
 // Find with query DSL
 const activeUsers = await User.where({
-  q: ['eq(data.status,"active")', 'gt(data.score,100)']
+  q: ['eq(status,"active")', 'gt(score,100)']
 });
 
 // Find with JSON filter
 const filteredUsers = await User.where({
   filter: {
-    eq: { 'data.status': 'active' },
-    gt: { 'data.score': 100 }
+    eq: { 'status': 'active' },
+    gt: { 'score': 100 }
   }
 });
 
@@ -135,11 +133,11 @@ const user = await User.find('user-123');
 
 // Access data
 console.log(user.data.name); // 'John Doe'
-console.log(user.get('data.email')); // 'john@example.com'
+console.log(user.get('email')); // 'john@example.com'
 
 // Set data
-user.set('data.status', 'inactive');
-user.set('data.last_login', new Date());
+user.set('status', 'inactive');
+user.set('last_login', new Date());
 
 // Save changes
 await user.save();
@@ -155,32 +153,32 @@ await user.patch({
   preferences: { theme: 'dark' }
 });
 
-// Delete
-await user.destroy();
-
 // Reload from server
 await user.reload();
+
+// Delete
+await user.destroy();
 ```
 
 ### Query DSL Examples
 
 ```javascript
 // Equality
-await User.where({ q: ['eq(data.status,"active")'] });
+await User.where({ q: ['eq(status,"active")'] });
 
 // Numeric comparisons
-await User.where({ q: ['gt(data.score,100)', 'lt(data.age,65)'] });
+await User.where({ q: ['gt(score,100)', 'lt(age,65)'] });
 
 // Array operations
-await User.where({ q: ['in(data.role,["admin","user"])'] });
+await User.where({ q: ['in(role,["admin","user"])'] });
 
 // Existence checks
-await User.where({ q: ['exists(data.email,true)'] });
+await User.where({ q: ['exists(email,true)'] });
 
 // Multiple conditions
 await User.where({ 
-  q: ['eq(data.status,"active")', 'gt(data.score,100)'],
-  order: ['-data.created_at']
+  q: ['eq(status,"active")', 'gt(score,100)'],
+  order: ['-created_at']
 });
 ```
 
@@ -254,11 +252,11 @@ try {
 // Complex query
 await User.where({
   q: [
-    'eq(data.status,"active")',
-    'gt(data.score,100)',
-    'in(data.role,["admin","moderator"])'
+    'eq(status,"active")',
+    'gt(score,100)',
+    'in(role,["admin","moderator"])'
   ],
-  order: ['-data.last_login', 'data.name'],
+  order: ['-last_login', 'name'],
   limit: 50
 });
 ```
@@ -275,4 +273,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **GitHub**: [https://github.com/petersonwynkooptech/s5.js](https://github.com/petersonwynkooptech/s5.js)
 - **npm**: [https://www.npmjs.com/package/s5.js](https://www.npmjs.com/package/s5.js)
-- **s5 Platform**: [https://s5.host](https://s5.host)
+- **s5 Platform**: [https://superstupidsimple.com](https://superstupidsimple.com)
