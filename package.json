@@ -1,6 +1,6 @@
 {
   "name": "s5-orm.js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "JavaScript ORM for s5 API - Rails ActiveRecord-like interface",
   "main": "index.js",
   "type": "module",
